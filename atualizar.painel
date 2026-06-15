@@ -1,4 +1,4 @@
- .github/workflows/atualizar-painel.yml
+.github/workflows/atualizar-painel.yml
 name: Atualizar Painel FUNDEF ACP
 
 on:
