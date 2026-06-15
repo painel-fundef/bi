@@ -1,0 +1,39 @@
+ .github/workflows/atualizar-painel.yml
+name: Atualizar Painel FUNDEF ACP
+
+on:
+  schedule:
+    # Roda a cada 6 horas (ajuste o cron se quiser outra frequencia)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: {}   # permite rodar manualmente pela aba "Actions" do GitHub
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Sincronizar planilha e gerar painel
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: python sincronizar_painel.py
+
+      - name: Publicar alteracoes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add painel-fundef-acp.html
+          git diff --staged --quiet && echo "Sem mudancas" || git commit -m "Atualizacao automatica do painel"
+          git push
