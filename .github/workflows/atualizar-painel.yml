@@ -3,7 +3,7 @@ name: Atualizar Painel FUNDEF ACP
 on:
   schedule:
     # Roda a cada 6 horas (ajuste o cron se quiser outra frequencia)
-    - cron: '*/15 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch: {}   # permite rodar manualmente pela aba "Actions" do GitHub
 
 permissions:
